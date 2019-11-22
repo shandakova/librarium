@@ -17,7 +17,8 @@ public class Lists {
     private Long id;
     private String name;
     @ManyToMany(mappedBy = "lists")
-    private Set<Book> books=new HashSet<>();
+    private Set<Book> books = new HashSet<>();
+
     public Lists(String name) {
         this.name = name;
     }

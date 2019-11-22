@@ -5,5 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public interface CommentRepository extends CrudRepository<Comment,Long> {
+public interface CommentRepository extends CrudRepository<Comment, Long> {
 }

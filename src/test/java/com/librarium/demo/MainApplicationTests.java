@@ -12,9 +12,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
@@ -26,39 +27,44 @@ class MainApplicationTests {
     private QuoteRepository quoteRepository;
     @Autowired
     private ListsRepository listsRepository;
+
     @Test
     void saveBook() {
         long count = bookRepository.count();
         Book book = new Book("Name");
         book.setAuthor("Author");
         bookRepository.save(book);
-        assertEquals(count+1,bookRepository.count());
+        assertEquals(count + 1, bookRepository.count());
     }
+
     @Test
     void saveManyBooks() {
         long count = bookRepository.count();
         Book book = new Book("Name");
         Book book2 = new Book("Name2");
-        bookRepository.saveAll(Arrays.asList(book,book2));
-        assertEquals(count+2,bookRepository.count());
+        bookRepository.saveAll(Arrays.asList(book, book2));
+        assertEquals(count + 2, bookRepository.count());
     }
+
     @Test
     void findById() {
         Book book = new Book("Name");
         bookRepository.save(book);
         Optional<Book> optBook = Optional.of(bookRepository.findById(book.getId()).orElse(new Book("Not finded")));
-        assertEquals("Name",optBook.get().getName());
+        assertEquals("Name", optBook.get().getName());
     }
+
     @Test
     void findByNameLike() {
-        List<Book> books =bookRepository.findByNameContainsIgnoreCase("cool book");
-        int count=books.size();
+        List<Book> books = bookRepository.findByNameContainsIgnoreCase("cool book");
+        int count = books.size();
         Book book = new Book("Cool Book 1");
         Book book2 = new Book("Cool Book 2");
-        bookRepository.saveAll(Arrays.asList(book,book2));
-        books =bookRepository.findByNameContainsIgnoreCase("cool book");
-        assertEquals(count+2,books.size());
+        bookRepository.saveAll(Arrays.asList(book, book2));
+        books = bookRepository.findByNameContainsIgnoreCase("cool book");
+        assertEquals(count + 2, books.size());
     }
+
     @Test
     @Transactional
     void orphanRemovingQuote() {
@@ -75,10 +81,11 @@ class MainApplicationTests {
         bookRepository.deleteAll();
         assertEquals(0, quoteRepository.count());
     }
+
     @Test
     @Transactional
-    void removeQuote(){
-        Long count =quoteRepository.count();
+    void removeQuote() {
+        Long count = quoteRepository.count();
         Book book = new Book("Name");
         bookRepository.save(book);
         Quote quote = new Quote();
@@ -86,19 +93,20 @@ class MainApplicationTests {
         quote.setBook(book);
         book.addQuote(quote);
         bookRepository.save(book);
-        assertEquals (count+1,quoteRepository.count());
-        quote=book.getQuotes().iterator().next();
+        assertEquals(count + 1, quoteRepository.count());
+        quote = book.getQuotes().iterator().next();
         book.getQuotes().remove(quote);
         bookRepository.save(book);
         quoteRepository.delete(quote);
-        assertEquals (count,quoteRepository.count());
+        assertEquals(count, quoteRepository.count());
     }
+
     @Transactional
     @Test
-    void addBookToList(){
-        long countList=listsRepository.count();
-        long countBook=bookRepository.count();
-        Book book =new Book("Book1");
+    void addBookToList() {
+        long countList = listsRepository.count();
+        long countBook = bookRepository.count();
+        Book book = new Book("Book1");
         bookRepository.save(book);
         Lists lists = new Lists();
         lists.getBooks().add(book);
@@ -106,8 +114,8 @@ class MainApplicationTests {
         listsRepository.save(lists);
         bookRepository.save(book);
         System.out.println(listsRepository.findAll().iterator().next().getBooks().size());
-        assertEquals (countList+1,bookRepository.count());
-        assertEquals (countBook+1,listsRepository.count());
+        assertEquals(countList + 1, bookRepository.count());
+        assertEquals(countBook + 1, listsRepository.count());
     }
 
 }

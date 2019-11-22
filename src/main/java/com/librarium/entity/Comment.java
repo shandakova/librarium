@@ -14,9 +14,10 @@ public class Comment {
     private Long id;
 
     @ManyToOne()
-    @JoinColumn(name="book_id")
+    @JoinColumn(name = "book_id")
     private Book book;
     private String comment;
+
     public Comment(Book book, String quotation) {
         this.book = book;
         this.comment = quotation;
