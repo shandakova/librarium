@@ -67,6 +67,60 @@ public class FieldParser {
         return " ";
     }
 
+    //возращает неверный символ или пустую строку для проверки года
+    public static String checkYear(String line) {
+        Pattern pattern = Pattern.compile(
+                "[" +
+                        "\\d" +          //цифры
+                        "]" +
+                        "{4}");                   //любое количество символов выше
+        Matcher matcher = pattern.matcher(line);
+        if (matcher.find()) {
+            int start = matcher.start();
+            int end = matcher.end();
+            if (start == 0 && end == line.length()) {
+                return "";
+            } else {
+                if (start != 0) {
+                    return Character.toString(line.charAt(0));
+                } else {
+                    return Character.toString(line.charAt(end));
+                }
+            }
+        }
+        return " ";
+    }
+
+    //возращает неверный символ или пустую строку для проверки ISBN
+    public static String checkISBN(String line) {
+        Pattern pattern = Pattern.compile(
+                "[" +
+                        "\\d" +          //цифры
+                        "\\-" +
+                        "]" +
+                        "*");                   //любое количество символов выше
+        Matcher matcher = pattern.matcher(line);
+        if (matcher.find()) {
+            int start = matcher.start();
+            int end = matcher.end();
+            if (start == 0 && end == line.length()) {
+                return "";
+            } else {
+                if (start != 0) {
+                    return Character.toString(line.charAt(0));
+                } else {
+                    return Character.toString(line.charAt(end));
+                }
+            }
+        }
+        return " ";
+    }
+
+    public static String parseISBN(String line) {
+        String resultISBN = line.replaceAll("\\-", "");
+        return resultISBN;
+    }
+
     public static boolean isBlankString(String string) {
         return string == null || string.trim().isEmpty();
     }

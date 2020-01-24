@@ -23,7 +23,7 @@
             <fx:include source="mylibrary.fxml"/>
         </Tab>
         <Tab text="Добавление книги">
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+            <fx:include source="addbook.fxml"/>
         </Tab>
         <Tab text="Листы">
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
