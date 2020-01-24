@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Glow?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
@@ -51,13 +52,13 @@
          </font>
       </TextField>
       <Button fx:id="addBook" layoutX="415.0" layoutY="634.0" mnemonicParsing="false" onAction="#clickedAddBookButton" prefHeight="42.0" prefWidth="119.0" text="Добавить" />
-      <Button fx:id="searchInternet" layoutX="798.0" layoutY="39.0" mnemonicParsing="false" onAction="#clickedSearchNetworkButton"  prefHeight="53.0" prefWidth="129.0" text="Поиск по сети" />
+      <Button fx:id="searchInternet" layoutX="798.0" layoutY="39.0" mnemonicParsing="false" onAction="#clickedSearchNetworkButton" prefHeight="53.0" prefWidth="129.0" text="Поиск по сети" />
       <Label layoutX="366.0" layoutY="142.0" text="Автор">
          <font>
             <Font size="19.0" />
          </font>
       </Label>
-      <Label layoutX="353.0" layoutY="216.0" text="Название">
+      <Label layoutX="338.0" layoutY="216.0" text="Название">
          <font>
             <Font size="19.0" />
          </font>
@@ -67,7 +68,7 @@
             <Font size="19.0" />
          </font>
       </Label>
-      <Label layoutX="338.0" layoutY="364.0" text="Год издания">
+      <Label layoutX="312.0" layoutY="364.0" text="Год издания">
          <font>
             <Font size="19.0" />
          </font>
@@ -77,11 +78,13 @@
             <Font size="19.0" />
          </font>
       </Label>
-      <Label layoutX="361.0" layoutY="498.0" text="Рейтинг">
-         <font>
-            <Font size="19.0" />
-         </font>
-      </Label>
-      <TableView fx:id="addRate" layoutX="462.0" layoutY="491.0" prefHeight="91.0" prefWidth="327.0" />
+      <TableView fx:id="addRate" layoutX="461.0" layoutY="491.0" prefHeight="91.0" prefWidth="328.0" style="-fx-alignment: CENTER;">
+      <effect>
+         <Glow />
+      </effect>
+      <columnResizePolicy>
+         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+      </columnResizePolicy>
+      </TableView>
    </children>
 </AnchorPane>

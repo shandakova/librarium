@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.librarium.gui.AddCommentController" />
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.librarium.gui.AddCommentController">
+   <children>
+      <Button fx:id="cancel" layoutX="159.0" layoutY="296.0" mnemonicParsing="false" onAction="#clickedCancelButton" text="Отмена" />
+      <Button fx:id="saveComment" layoutX="360.0" layoutY="296.0" mnemonicParsing="false" onAction="#clickedSaveCommentButton" text="Сохранить" />
+      <Label layoutX="216.0" layoutY="72.0" text="Текст комментария">
+         <font>
+            <Font size="19.0" />
+         </font></Label>
+      <TextField fx:id="addComment" layoutX="82.0" layoutY="121.0" prefHeight="153.0" prefWidth="432.0" />
+   </children>
+</AnchorPane>

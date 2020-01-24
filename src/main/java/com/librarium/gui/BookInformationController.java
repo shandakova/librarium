@@ -55,8 +55,6 @@ public class BookInformationController implements Initializable {
     private TableView<Comment> commentTable;
     @FXML
     private TableView<Lists> listTable;
-    @FXML
-    private Button closeInformation;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -331,11 +329,5 @@ public class BookInformationController implements Initializable {
         controller.initData(bookRepository, book, listsRepository);
 
         stage.show();
-    }
-
-    @FXML
-    private void clickedCloseButton() {
-        Stage stage = (Stage) closeInformation.getScene().getWindow();
-        stage.close();
     }
 }
