@@ -13,6 +13,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -66,7 +67,7 @@ public class MyLibraryController implements Initializable {
         ObservableList<Book> searchList = FXCollections.observableArrayList();
         switch (type) {
             case ("Все"):
-                searchList.addAll((Collection<? extends Book>) bookRepository.findAll());
+                searchList.addAll(bookRepository.findAll());
                 break;
             case ("Название"):
                 searchList.addAll(bookRepository.findByNameContainsIgnoreCase(searchReq));
@@ -172,10 +173,14 @@ public class MyLibraryController implements Initializable {
                                 ((Node) event.getSource()).getScene().getWindow());
                         BookInformationController controller = loader.getController();
                         controller.initData(bookRepository, commentRepository, quoteRepository, listsRepository, book);
-
+                        stage.setOnCloseRequest(e ->
+                        {
+                            update();
+                        });
                         stage.show();
                     }
                 });
+                cell.setCursor(Cursor.HAND);
                 return cell;
             }
         });
@@ -213,5 +218,9 @@ public class MyLibraryController implements Initializable {
 
         });
         searchTable.getColumns().addAll(colAuthor, colName, colRating);
+    }
+    public void update() {
+        searchTable.getItems().remove(0, searchTable.getItems().size());
+        clickedSearchButton();
     }
 }

@@ -124,4 +124,11 @@ public class FieldParser {
     public static boolean isBlankString(String string) {
         return string == null || string.trim().isEmpty();
     }
+
+    public static boolean haveCyrillicSymbols(String s) {
+        for (char a : s.toCharArray()) {
+            if (Character.UnicodeBlock.of(a) == Character.UnicodeBlock.CYRILLIC) return true;
+        }
+        return false;
+    }
 }

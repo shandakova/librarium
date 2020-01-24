@@ -25,11 +25,11 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.controlsfx.control.Rating;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Collection;
 import java.util.ResourceBundle;
 
 @Controller
@@ -61,7 +61,7 @@ public class BookInformationController implements Initializable {
 
     }
 
-    public void initData(BookRepository bookRepository, CommentRepository commentRepository, QuoteRepository quoteRepository, ListsRepository listsRepository, Book book) {
+    public void initData(BookRepository bookRepository, CommentRepository commentRepository, QuoteRepository quoteRepository, ListsRepository listsRepository, Book book ) {
         this.book = book;
         this.bookRepository = bookRepository;
         this.commentRepository = commentRepository;
@@ -75,17 +75,16 @@ public class BookInformationController implements Initializable {
         colRating.setCellValueFactory(new PropertyValueFactory<>("rate"));
 
         colRating.setCellFactory(table -> new TableCell<Book, Number>() {
-        private final Rating rating;
+        private final Rating rating = new Rating(5);
         private final ChangeListener<Number> ratingChangeListener;
 
         {
-            rating = new Rating(book.getRate());
             ratingChangeListener = (observable, oldValue, newValue) -> {
-                TableColumn<?, Number> column = getTableColumn();
                 Book book = this.getTableView().getItems().get(this.getIndex());
                 book.setRate(newValue.intValue());
-                bookRepository.save(book);
+                bookRepository.saveAndFlush(book);
             };
+            setStyle("-fx-alignment: CENTER;");
         }
 
         @Override
@@ -102,6 +101,9 @@ public class BookInformationController implements Initializable {
         }
         });
         rate.getColumns().addAll(colRating);
+        ObservableList<Book> observeListb = FXCollections.observableArrayList();
+        observeListb.addAll(book);
+        rate.setItems(observeListb);
 
         quoteTable.setPlaceholder(new Label("Пока здесь нет цитат :с"));
         quoteTable.setEditable(false);
