@@ -2,18 +2,26 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.librarium.gui.EditQuoteController">
-   <children>
-      <Button fx:id="deleteQuote" layoutX="174.0" layoutY="283.0" mnemonicParsing="false" onAction="#clickedDeleteQuoteButton" text="Удалить" />
-      <Button fx:id="updateQuote" layoutX="376.0" layoutY="283.0" mnemonicParsing="false" onAction="#clickedUpdateQuoteButton" text="Сохранить" />
-      <Label layoutX="250.0" layoutY="66.0" text="Текст цитаты">
-         <font>
-            <Font size="19.0" />
-         </font></Label>
-      <TextField fx:id="editQuote" layoutX="65.0" layoutY="109.0" prefHeight="154.0" prefWidth="482.0" />
-   </children>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+            prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.librarium.gui.EditQuoteController">
+    <Button fx:id="deleteQuote" layoutX="174.0" layoutY="283.0" mnemonicParsing="false"
+            onAction="#clickedDeleteQuoteButton" text="Удалить"/>
+    <Button fx:id="updateQuote" layoutX="376.0" layoutY="283.0" mnemonicParsing="false"
+            onAction="#clickedUpdateQuoteButton" text="Сохранить"/>
+    <Label layoutX="250.0" layoutY="66.0" text="Текст цитаты">
+        <font>
+            <Font size="19.0"/>
+        </font>
+    </Label>
+    <TextArea fx:id="editQuote" layoutX="65.0" layoutY="109.0" prefHeight="154.0" prefWidth="482.0"
+              wrapText="true">
+        <cursor>
+            <Cursor fx:constant="TEXT"/>
+        </cursor>
+    </TextArea>
 </AnchorPane>

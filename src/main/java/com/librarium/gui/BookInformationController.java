@@ -25,7 +25,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.controlsfx.control.Rating;
-import org.hibernate.Hibernate;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
@@ -55,6 +54,12 @@ public class BookInformationController implements Initializable {
     private TableView<Comment> commentTable;
     @FXML
     private TableView<Lists> listTable;
+    @FXML
+    private Button editBook;
+    @FXML
+    private Button addComment;
+    @FXML
+    private Button addList;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -68,7 +73,9 @@ public class BookInformationController implements Initializable {
         this.listsRepository = listsRepository;
         this.quoteRepository = quoteRepository;
         author.setText(book.getAuthor());
+        author.setWrapText(true);
         title.setText(book.getName());
+        title.setWrapText(true);
         genre.setText(book.getGenre());
         year.setText(String.valueOf(book.getYear()));
         TableColumn<Book, Number> colRating = new TableColumn<>("Рейтинг");
@@ -144,8 +151,9 @@ public class BookInformationController implements Initializable {
                         stage.initOwner(
                                 ((Node) event.getSource()).getScene().getWindow());
                         EditQuoteController controller = loader.getController();
-                        controller.initData(bookRepository, quoteRepository, quote);
-
+                        controller.initData(quoteRepository, quote);
+                        stage.setOnHidden(e ->
+                                updateQuoteTable());
                         stage.show();
                     }
                 });
@@ -193,8 +201,9 @@ public class BookInformationController implements Initializable {
                         stage.initOwner(
                                 ((Node) event.getSource()).getScene().getWindow());
                         EditCommentController controller = loader.getController();
-                        controller.initData(bookRepository, commentRepository, comment);
-
+                        controller.initData(commentRepository, comment);
+                        stage.setOnHidden(e ->
+                                updateCommentTable());
                         stage.show();
                     }
                 });
@@ -243,7 +252,8 @@ public class BookInformationController implements Initializable {
                                 ((Node) event.getSource()).getScene().getWindow());
                         ViewListController controller = loader.getController();
                         controller.initData(bookRepository, listsRepository, list);
-
+                        stage.setOnHidden(e ->
+                                updateListTable());
                         stage.show();
                     }
                 });
@@ -265,11 +275,9 @@ public class BookInformationController implements Initializable {
         }
         stage.setTitle("Окно редактирования");
         stage.initModality(Modality.WINDOW_MODAL);
-        /*stage.initOwner(
-                ((Node) event.getSource()).getScene().getWindow());*/ //???????????
+        stage.initOwner(editBook.getScene().getWindow());
         EditPageController controller = loader.getController();
         controller.initData(bookRepository, book);
-
         stage.show();
     }
 
@@ -285,11 +293,11 @@ public class BookInformationController implements Initializable {
         }
         stage.setTitle("Окно добавления цитаты");
         stage.initModality(Modality.WINDOW_MODAL);
-        /*stage.initOwner(
-                ((Node) event.getSource()).getScene().getWindow());*/ //???????????
+        stage.initOwner(editBook.getScene().getWindow());
         AddQuoteController controller = loader.getController();
-        controller.initData(quoteRepository, book, bookRepository);
-
+        controller.initData(quoteRepository, book);
+        stage.setOnHidden(e ->
+                updateQuoteTable());
         stage.show();
     }
 
@@ -305,11 +313,10 @@ public class BookInformationController implements Initializable {
         }
         stage.setTitle("Окно добавления комментария");
         stage.initModality(Modality.WINDOW_MODAL);
-        /*stage.initOwner(
-                ((Node) event.getSource()).getScene().getWindow());*/ //???????????
+        stage.initOwner(addComment.getScene().getWindow());
         AddCommentController controller = loader.getController();
-        controller.initData(bookRepository, book, commentRepository);
-
+        controller.initData(book, commentRepository);
+        stage.setOnHidden(e -> updateCommentTable());
         stage.show();
     }
 
@@ -325,11 +332,24 @@ public class BookInformationController implements Initializable {
         }
         stage.setTitle("Окно добавления книги в лист");
         stage.initModality(Modality.WINDOW_MODAL);
-        /*stage.initOwner(
-                ((Node) event.getSource()).getScene().getWindow());*/ //??????????? button instead of event
+        stage.initOwner(addList.getScene().getWindow());
         AddListController controller = loader.getController();
         controller.initData(bookRepository, book, listsRepository);
+        stage.setOnHidden(e ->
+                updateListTable());
 
         stage.show();
+    }
+    private void updateQuoteTable(){
+        quoteTable.getItems().remove(0,quoteTable.getItems().size());
+        quoteTable.setItems(FXCollections.observableArrayList(quoteRepository.findByBook(book)));
+    }
+    private void updateCommentTable(){
+        commentTable.getItems().remove(0,commentTable.getItems().size());
+        commentTable.setItems(FXCollections.observableArrayList(commentRepository.findByBook(book)));
+    }
+    private void updateListTable(){
+        listTable.getItems().remove(0,listTable.getItems().size());
+        listTable.setItems(FXCollections.observableArrayList(listsRepository.findByBooks(book)));
     }
 }

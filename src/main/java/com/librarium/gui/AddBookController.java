@@ -1,18 +1,26 @@
 package com.librarium.gui;
 
 import com.librarium.entity.Book;
+import com.librarium.repository.BookApiRepository;
 import com.librarium.repository.BookRepository;
 import com.librarium.utils.FieldParser;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import org.controlsfx.control.Rating;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.io.IOException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ResourceBundle;
 
 @Controller
@@ -31,10 +39,14 @@ public class AddBookController implements Initializable {
     private TextField addISBN;
     @FXML
     private TableView<Integer> addRate;
+    @FXML
+    private Button searchInternet;
     @Autowired
     private MyLibraryController mlc;
+    @Autowired
+    private BookApiRepository bar;
 
-    Integer rate = 0;
+    private Integer rate = 0;
 
     @FXML
     private void clickedAddBookButton() {
@@ -73,10 +85,50 @@ public class AddBookController implements Initializable {
         updateWindows();
     }
 
+    public void fillField(Book book) {
+        addAuthor.setText(book.getAuthor());
+        addTitle.setText(book.getName());
+        addGenre.setText(book.getGenre());
+        addYear.setText(String.valueOf(book.getYear()));
+        addISBN.setText(book.getISBN());
+    }
+
     @FXML
     private void clickedSearchNetworkButton() {
+        if (!checkInternetConnection()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Ошибка");
+            alert.setHeaderText(null);
+            alert.getButtonTypes().set(0, new ButtonType("OK", ButtonBar.ButtonData.LEFT));
+            alert.setContentText("Поиск по сети невозможен!");
+            alert.showAndWait();
+        } else {
+            Stage stage = new Stage();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/internetsearch.fxml"));
+            try {
+                Parent root = loader.load();
+                stage.setScene(new Scene(root));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            stage.setTitle("Информация о книге");
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initOwner(searchInternet.getScene().getWindow());
+            InternetSearchController controller = loader.getController();
+            controller.initData(this, bar);
+            stage.show();
+        }
+    }
 
-
+    private boolean checkInternetConnection() {
+        try {
+            URL url = new URL("https://www.googleapis.com/books/v1/volumes?q=test");
+            URLConnection connection = url.openConnection();
+            connection.connect();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private boolean checkAddFields(String author, String title, String genre, String year, String isbn) {

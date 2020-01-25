@@ -2,18 +2,26 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.librarium.gui.EditCommentController">
-   <children>
-      <Button fx:id="deleteComment" layoutX="146.0" layoutY="300.0" mnemonicParsing="false" onAction="#clickedDeleteCommentButton" text="Удалить" />
-      <Button fx:id="updateComment" layoutX="377.0" layoutY="300.0" mnemonicParsing="false" onAction="#clickedUpdateCommentButton" text="Сохранить" />
-      <Label layoutX="220.0" layoutY="56.0" text="Текст комментария">
-         <font>
-            <Font size="19.0" />
-         </font></Label>
-      <TextField fx:id="editComment" layoutX="57.0" layoutY="95.0" prefHeight="187.0" prefWidth="494.0" />
-   </children>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+            prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.librarium.gui.EditCommentController">
+    <Button fx:id="deleteComment" layoutX="146.0" layoutY="300.0" mnemonicParsing="false"
+            onAction="#clickedDeleteCommentButton" text="Удалить"/>
+    <Button fx:id="updateComment" layoutX="377.0" layoutY="300.0" mnemonicParsing="false"
+            onAction="#clickedUpdateCommentButton" text="Сохранить"/>
+    <Label layoutX="220.0" layoutY="56.0" text="Текст комментария">
+        <font>
+            <Font size="19.0"/>
+        </font>
+    </Label>
+    <TextArea fx:id="editComment" layoutX="57.0" layoutY="95.0" prefHeight="187.0" prefWidth="494.0"
+              wrapText="true">
+        <cursor>
+            <Cursor fx:constant="TEXT"/>
+        </cursor>
+    </TextArea>
 </AnchorPane>

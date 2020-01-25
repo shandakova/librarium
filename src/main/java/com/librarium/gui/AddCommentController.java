@@ -2,33 +2,29 @@ package com.librarium.gui;
 
 import com.librarium.entity.Book;
 import com.librarium.entity.Comment;
-import com.librarium.entity.Quote;
-import com.librarium.repository.BookRepository;
 import com.librarium.repository.CommentRepository;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class AddCommentController implements Initializable {
-    private BookRepository bookRepository;
     private CommentRepository commentRepository;
     private Book book;
 
     @FXML
-    private TextField addComment;
+    private TextArea textArea;
     @FXML
     private Button cancel;
     @FXML
     private Button saveComment;
 
-    public void initData(BookRepository bookRepository, Book book, CommentRepository commentRepository) {
+    public void initData( Book book, CommentRepository commentRepository) {
         this.book = book;
-        this.bookRepository = bookRepository;
         this.commentRepository = commentRepository;
     }
 
@@ -36,8 +32,8 @@ public class AddCommentController implements Initializable {
     private void clickedSaveCommentButton() {
         Comment comment = new Comment();
         comment.setBook(book);
-        comment.setComment(addComment.getText());
-        commentRepository.save(comment);
+        comment.setComment(textArea.getText());
+        commentRepository.saveAndFlush(comment);
         Stage stage = (Stage) saveComment.getScene().getWindow();
         stage.close();
     }
