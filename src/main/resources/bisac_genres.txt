@@ -1,0 +1,53 @@
+antiques & collectibles:антиквариат и предметы коллекционирования
+architecture:архитектура
+art:искусство
+bibles:библия
+biography & autobiography:биография & автобиография
+body, mind & spirit:тело, разум & дух
+business & economics:бизнес & экономика
+comics & graphic novels:комиксы & графические новеллы
+computers:компьютеры
+cooking:готовка
+crafts & hobbies:рукоделие & хобби
+design:дизайн
+drama:драма
+education:образование
+family & relationships:семья & отношения
+fiction:художественная литература
+foreign language study:изучение иностранных языков
+games & activities:игры & виды деятельности
+gardening:садоводство
+health & fitness:здоровье & фитнес
+history:история
+house & home:дом 
+humor:юмор
+juvenile fiction:художественная литература для детей
+juvenile nonfiction:научно-популярная литература для детей
+language arts & disciplines:языковые искусства & дисциплины
+law:закон
+literary collections:литературная коллекция
+literary criticism:литературный критицизм
+mathematics:математика
+medical:медицина
+music:музыка
+nature:природа
+performing arts:исполнительское искусство
+pets:животные
+philosophy:философия
+photography:фотография
+poetry:поэзия
+political science:политология
+psychology:психология
+religion:религия
+science:наука
+self-help:самопомощь
+social science:обществознание
+sports & recreation:спорт & отдых
+study aids:учебные пособия
+technology & engineering:технологии & инженерия
+transportation:транспортирование
+travel:путешествия
+true crime:преступления
+young adult fiction:подростковая художественная литература
+young adult nonfiction:подростковая популярно-научная литература
+other:другое
