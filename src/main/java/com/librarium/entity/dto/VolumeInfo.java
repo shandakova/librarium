@@ -16,4 +16,5 @@ public class VolumeInfo {
     private List<String> categories;
     private String publishedDate;
     private List<Map<String, String>> industryIdentifiers;
+    private String description;
 }
