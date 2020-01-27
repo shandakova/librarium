@@ -1,3 +1,6 @@
 #searchTable .table-column {
     -fx-alignment: CENTER;
 }
+#bookTable .table-column {
+    -fx-alignment: CENTER;
+}

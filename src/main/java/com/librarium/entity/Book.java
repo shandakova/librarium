@@ -25,13 +25,13 @@ public class Book {
     private int year;
     private int rate;
     private String ISBN;
-    @OneToMany(mappedBy = "book", orphanRemoval = true, cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "book", orphanRemoval = true, cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
     private Set<Quote> quotes = new HashSet<>();
 
-    @OneToMany(mappedBy = "book", orphanRemoval = true, cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "book", orphanRemoval = true, cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private Set<Comment> comments = new HashSet<>();
 
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinTable(
             name = "books_lists",
             joinColumns = {@JoinColumn(name = "book_id", referencedColumnName = "id")},
@@ -50,5 +50,8 @@ public class Book {
 
     public int getNumberQuotes() {
         return quotes.size();
+    }
+    public String toString(){
+        return "";
     }
 }

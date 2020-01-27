@@ -16,10 +16,13 @@ public class Lists {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @ManyToMany(mappedBy = "lists")
+    @ManyToMany(mappedBy = "lists",fetch = FetchType.EAGER)
     private Set<Book> books = new HashSet<>();
 
     public Lists(String name) {
         this.name = name;
+    }
+    public int getSize(){
+        return books.size();
     }
 }

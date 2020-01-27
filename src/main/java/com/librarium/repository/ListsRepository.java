@@ -10,4 +10,8 @@ import java.util.List;
 @Transactional
 public interface ListsRepository extends JpaRepository<Lists, Long> {
     List<Lists> findByBooks(Book book);
+
+    List<Lists> findByName(String name);
+
+    List<Lists> findByNameContainsIgnoreCase(String name);
 }
