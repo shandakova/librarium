@@ -87,6 +87,17 @@ public class RecommendationController implements Initializable {
     private void setCellFactory(TableColumn<Book, String> colAdd) {
         colAdd.setCellFactory(param -> {
             TableCell<Book, String> cell = new TableCell<Book, String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setText(null);
+                    } else {
+                        setText("+");
+                        setCursor(Cursor.HAND);
+                        setStyle("-fx-text-fill: green;");
+                    }
+                }
             };
             cell.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
                 Book book = cell.getTableView().getItems().get(cell.getIndex());
@@ -103,10 +114,7 @@ public class RecommendationController implements Initializable {
                     mlc.update();
                 }
             });
-            cell.setText("+");
             cell.setFont(Font.font(30));
-            cell.setStyle("-fx-text-fill: green;");
-            cell.setCursor(Cursor.HAND);
             return cell;
         });
     }

@@ -13,7 +13,6 @@ import javafx.scene.control.ComboBox;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class AddListController {
     private BookRepository bookRepository;
@@ -28,10 +27,8 @@ public class AddListController {
         this.listsRepository = listsRepository;
         List<Lists> lists = listsRepository.findAll();
         List<String> names = new ArrayList<>();
-        if (lists != null) {
-            for (Lists l : lists) {
-                names.add(l.getName());
-            }
+        for (Lists l : lists) {
+            names.add(l.getName());
         }
         names.add("");
         list.setItems(FXCollections.observableArrayList(names));
@@ -58,13 +55,12 @@ public class AddListController {
             alert.getButtonTypes().set(0, new ButtonType("OK", ButtonBar.ButtonData.LEFT));
             alert.setContentText("Книга уже находится в этом листе!");
             alert.showAndWait();
-            return;
         } else {
+            bookRepository.flush();
+            book = bookRepository.findById(book.getId()).get();
             book.getLists().add(l);
-            l.getBooks().add(book);
-            System.out.println(l.getId()+" "+book.getId());
+            System.err.println(l.getId() + " " + book.getId());
             bookRepository.saveAndFlush(book);
-            listsRepository.saveAndFlush(l);
             list.getScene().getWindow().hide();
         }
     }

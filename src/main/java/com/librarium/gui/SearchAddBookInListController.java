@@ -5,37 +5,28 @@ import com.librarium.entity.Lists;
 import com.librarium.repository.BookRepository;
 import com.librarium.repository.ListsRepository;
 import com.librarium.utils.FieldParser;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.controlsfx.control.Rating;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class SearchAddBookInListController implements Initializable {
     private BookRepository bookRepository;
     private ListsRepository listsRepository;
     private Lists list;
+    private List<Book> books;
     @FXML
     private ComboBox searchfilter;
     @FXML
@@ -128,15 +119,17 @@ public class SearchAddBookInListController implements Initializable {
         this.list = list;
         this.listsRepository = listsRepository;
         this.bookRepository = bookRepository;
+        ObservableList<Book> observeList = FXCollections.observableArrayList();
+        observeList.addAll(bookRepository.findAll());
+
+        searchresult.setItems(observeList);
+        books = bookRepository.findByLists(list);
     }
 
     private void initializeSearchTable() {
         searchresult.setPlaceholder(new Label("Пока здесь нет книг :с"));
         searchresult.setEditable(true);
-        ObservableList<Book> observeList = FXCollections.observableArrayList();
-        //observeList.addAll(bookRepository.findAll());
 
-        searchresult.setItems(observeList);
         TableColumn<Book, Integer> colAuthor = new TableColumn<>("Автор");
         colAuthor.setCellValueFactory(new PropertyValueFactory<>("author"));
 
@@ -169,27 +162,19 @@ public class SearchAddBookInListController implements Initializable {
 
         colRating.setCellFactory(table -> new TableCell<Book, Number>() {
             private final Rating rating;
-            private final ChangeListener<Number> ratingChangeListener;
 
             {
                 rating = new Rating(5);
-                ratingChangeListener = (observable, oldValue, newValue) -> {
-                    TableColumn<?, Number> column = getTableColumn();
-                    Book book = this.getTableView().getItems().get(this.getIndex());
-                    book.setRate(newValue.intValue());
-                    bookRepository.save(book);
-                };
+                rating.setMouseTransparent(true);
+                rating.setFocusTraversable(false);
             }
 
             @Override
             protected void updateItem(Number item, boolean empty) {
                 super.updateItem(item, empty);
-                rating.ratingProperty().removeListener(ratingChangeListener);
                 if (empty) {
                     setGraphic(null);
                 } else {
-                    rating.setRating(item.doubleValue());
-                    rating.ratingProperty().addListener(ratingChangeListener);
                     setGraphic(rating);
                 }
             }
@@ -198,23 +183,33 @@ public class SearchAddBookInListController implements Initializable {
         TableColumn<Book, String> colAdd = new TableColumn<>("");
         colAdd.setCellFactory(param -> {
             TableCell<Book, String> cell = new TableCell<Book, String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        Book book = getTableView().getItems().get(getIndex());
+                        if (books.contains(book)) {
+                            setText("✓");
+                        } else {
+                            setText("+");
+                        }
+
+                    }
+                }
             };
             cell.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-                Book book = cell.getTableView().getItems().get(cell.getIndex());
-                book.getLists().add(list);
-                list.getBooks().add(book);
-                bookRepository.saveAndFlush(book);
-                listsRepository.saveAndFlush(list);
-                cell.setText("✓");
-                cell.setDisable(true);
-            });
-            /*for (Book book : observeList) { //Commented 'cause it results in showing nothing in the column, probably due to the exception with the list
-                if (book.getLists().contains(list)) {
+                if (cell.getText().equals("+")) {
+                    Book book = cell.getTableView().getItems().get(cell.getIndex());
+                    book.getLists().add(list);
+                    list.getBooks().add(book);
+                    bookRepository.saveAndFlush(book);
+                    listsRepository.saveAndFlush(list);
                     cell.setText("✓");
-                } else {*/
-                    cell.setText("+");
-               /* }
-            }*/
+                    cell.setDisable(true);
+                }
+            });
             cell.setFont(Font.font(30));
             cell.setStyle("-fx-text-fill: green;");
             cell.setCursor(Cursor.HAND);
@@ -229,8 +224,4 @@ public class SearchAddBookInListController implements Initializable {
         ok.getScene().getWindow().hide();
     }
 
-    public void update() {
-        searchresult.getItems().remove(0, searchresult.getItems().size());
-        clickedSearchButton();
-    }
 }
