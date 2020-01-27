@@ -49,6 +49,9 @@ public class MyLibraryController implements Initializable {
     private TextField searchTextField;
     @FXML
     private TableView<Book> searchTable;
+    private MyLibraryController mlc = this;
+    @Autowired
+    private ListsController lc;
 
     @FXML
     private void changedSearchType() {
@@ -172,7 +175,7 @@ public class MyLibraryController implements Initializable {
                         stage.initOwner(
                                 ((Node) event.getSource()).getScene().getWindow());
                         BookInformationController controller = loader.getController();
-                        controller.initData(bookRepository, commentRepository, quoteRepository, listsRepository, book);
+                        controller.initData(bookRepository, commentRepository, quoteRepository, listsRepository, book, mlc, lc);
                         stage.setOnCloseRequest(e ->
                         {
                             update();
@@ -219,6 +222,7 @@ public class MyLibraryController implements Initializable {
         });
         searchTable.getColumns().addAll(colAuthor, colName, colRating);
     }
+
     public void update() {
         searchTable.getItems().remove(0, searchTable.getItems().size());
         clickedSearchButton();

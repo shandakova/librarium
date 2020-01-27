@@ -85,7 +85,7 @@ class MainApplicationTests {
     @Test
     @Transactional
     void removeQuote() {
-        Long count = quoteRepository.count();
+        long count = quoteRepository.count();
         Book book = new Book("Name");
         bookRepository.save(book);
         Quote quote = new Quote();
@@ -117,5 +117,6 @@ class MainApplicationTests {
         assertEquals(countList + 1, bookRepository.count());
         assertEquals(countBook + 1, listsRepository.count());
     }
+
 
 }

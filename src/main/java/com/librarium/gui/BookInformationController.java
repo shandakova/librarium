@@ -14,7 +14,6 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -28,16 +27,17 @@ import org.controlsfx.control.Rating;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
+
 
 @Controller
-public class BookInformationController implements Initializable {
+public class BookInformationController {
     private BookRepository bookRepository;
     private CommentRepository commentRepository;
     private QuoteRepository quoteRepository;
     private ListsRepository listsRepository;
     private Book book;
+    private MyLibraryController mlc;
+    private ListsController lc;
     @FXML
     private Label author;
     @FXML
@@ -61,17 +61,14 @@ public class BookInformationController implements Initializable {
     @FXML
     private Button addList;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }
-
-    public void initData(BookRepository bookRepository, CommentRepository commentRepository, QuoteRepository quoteRepository, ListsRepository listsRepository, Book book ) {
+    public void initData(BookRepository bookRepository, CommentRepository commentRepository, QuoteRepository quoteRepository, ListsRepository listsRepository, Book book, MyLibraryController mlc, ListsController lc) {
         this.book = book;
         this.bookRepository = bookRepository;
         this.commentRepository = commentRepository;
         this.listsRepository = listsRepository;
         this.quoteRepository = quoteRepository;
+        this.mlc = mlc;
+        this.lc = lc;
         author.setText(book.getAuthor());
         author.setWrapText(true);
         title.setText(book.getName());
@@ -82,30 +79,30 @@ public class BookInformationController implements Initializable {
         colRating.setCellValueFactory(new PropertyValueFactory<>("rate"));
 
         colRating.setCellFactory(table -> new TableCell<Book, Number>() {
-        private final Rating rating = new Rating(5);
-        private final ChangeListener<Number> ratingChangeListener;
+            private final Rating rating = new Rating(5);
+            private final ChangeListener<Number> ratingChangeListener;
 
-        {
-            ratingChangeListener = (observable, oldValue, newValue) -> {
-                Book book = this.getTableView().getItems().get(this.getIndex());
-                book.setRate(newValue.intValue());
-                bookRepository.saveAndFlush(book);
-            };
-            setStyle("-fx-alignment: CENTER;");
-        }
-
-        @Override
-        protected void updateItem(Number item, boolean empty) {
-            super.updateItem(item, empty);
-            rating.ratingProperty().removeListener(ratingChangeListener);
-            if (empty) {
-                setGraphic(null);
-            } else {
-                rating.setRating(item.doubleValue());
-                rating.ratingProperty().addListener(ratingChangeListener);
-                setGraphic(rating);
+            {
+                ratingChangeListener = (observable, oldValue, newValue) -> {
+                    Book book = this.getTableView().getItems().get(this.getIndex());
+                    book.setRate(newValue.intValue());
+                    bookRepository.saveAndFlush(book);
+                };
+                setStyle("-fx-alignment: CENTER;");
             }
-        }
+
+            @Override
+            protected void updateItem(Number item, boolean empty) {
+                super.updateItem(item, empty);
+                rating.ratingProperty().removeListener(ratingChangeListener);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    rating.setRating(item.doubleValue());
+                    rating.ratingProperty().addListener(ratingChangeListener);
+                    setGraphic(rating);
+                }
+            }
         });
         rate.getColumns().addAll(colRating);
         ObservableList<Book> observeListb = FXCollections.observableArrayList();
@@ -252,8 +249,10 @@ public class BookInformationController implements Initializable {
                                 ((Node) event.getSource()).getScene().getWindow());
                         ViewListController controller = loader.getController();
                         controller.initData(bookRepository, listsRepository, list);
-                        stage.setOnHidden(e ->
-                                updateListTable());
+                        stage.setOnHidden(e -> {
+                            updateListTable();
+                            lc.clickedSearchButton();
+                        });
                         stage.show();
                     }
                 });
@@ -277,7 +276,7 @@ public class BookInformationController implements Initializable {
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(editBook.getScene().getWindow());
         EditPageController controller = loader.getController();
-        controller.initData(bookRepository, book);
+        controller.initData(bookRepository, book, this);
         stage.show();
     }
 
@@ -291,7 +290,7 @@ public class BookInformationController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        stage.setTitle("Окно добавления цитаты");
+        stage.setTitle("Добавление цитаты");
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(editBook.getScene().getWindow());
         AddQuoteController controller = loader.getController();
@@ -311,7 +310,7 @@ public class BookInformationController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        stage.setTitle("Окно добавления комментария");
+        stage.setTitle("Добавление комментария");
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(addComment.getScene().getWindow());
         AddCommentController controller = loader.getController();
@@ -330,26 +329,43 @@ public class BookInformationController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        stage.setTitle("Окно добавления книги в лист");
+        stage.setTitle("Добавление книги в лист");
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(addList.getScene().getWindow());
         AddListController controller = loader.getController();
         controller.initData(bookRepository, book, listsRepository);
-        stage.setOnHidden(e ->
-                updateListTable());
-
+        stage.setOnHidden(e -> updateListTable());
         stage.show();
     }
-    private void updateQuoteTable(){
-        quoteTable.getItems().remove(0,quoteTable.getItems().size());
+
+    private void updateQuoteTable() {
+        quoteTable.getItems().remove(0, quoteTable.getItems().size());
         quoteTable.setItems(FXCollections.observableArrayList(quoteRepository.findByBook(book)));
     }
-    private void updateCommentTable(){
-        commentTable.getItems().remove(0,commentTable.getItems().size());
+
+    private void updateCommentTable() {
+        commentTable.getItems().remove(0, commentTable.getItems().size());
         commentTable.setItems(FXCollections.observableArrayList(commentRepository.findByBook(book)));
     }
-    private void updateListTable(){
-        listTable.getItems().remove(0,listTable.getItems().size());
+
+    private void updateListTable() {
+        listTable.getItems().remove(0, listTable.getItems().size());
         listTable.setItems(FXCollections.observableArrayList(listsRepository.findByBooks(book)));
+    }
+
+    public void update() {
+        book = bookRepository.findById(book.getId()).get();
+        author.setText(book.getAuthor());
+        author.setWrapText(true);
+        title.setText(book.getName());
+        title.setWrapText(true);
+        genre.setText(book.getGenre());
+        year.setText(String.valueOf(book.getYear()));
+        mlc.update();
+    }
+
+    public void updatePagesAndClose() {
+        mlc.update();
+        editBook.getScene().getWindow().hide();
     }
 }
