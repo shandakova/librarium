@@ -6,13 +6,19 @@ import com.librarium.repository.BookRepository;
 import com.librarium.repository.ListsRepository;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,6 +33,8 @@ public class ViewListController implements Initializable {
     private Label listName;
     @FXML
     private TableView<Book> bookTable;
+	@FXML
+    private Button addBtn;
 
     public void initData(BookRepository bookRepository, ListsRepository listsRepository, Lists list) {
         this.list = list;
@@ -52,10 +60,10 @@ public class ViewListController implements Initializable {
             };
             cell.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
                 Book book = cell.getTableView().getItems().get(cell.getIndex());
-                list.getBooks().remove(book);
+                //list.getBooks().remove(book);
                 book.getLists().remove(list);
                 bookRepository.saveAndFlush(book);
-                listsRepository.saveAndFlush(list);
+                //listsRepository.saveAndFlush(list);
                 bookTable.getItems().remove(book);
             });
             cell.setText("-");
@@ -81,6 +89,19 @@ public class ViewListController implements Initializable {
         bookTable.getScene().getWindow().hide();
     }
     public void clickedAdd() {
-
+		Stage stage = new Stage();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/searchaddbookinlist.fxml"));
+        try {
+            Parent root = loader.load();
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        stage.setTitle("Добавление книги в лист");
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(addBtn.getScene().getWindow());
+        SearchAddBookInListController controller = loader.getController();
+        controller.initData(list, listsRepository, bookRepository);
+        stage.show();
     }
 }

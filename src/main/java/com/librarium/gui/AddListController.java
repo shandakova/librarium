@@ -60,10 +60,11 @@ public class AddListController {
             alert.showAndWait();
             return;
         } else {
+            book.getLists().add(l);
             l.getBooks().add(book);
             System.out.println(l.getId()+" "+book.getId());
-            book.getLists().add(l);
             bookRepository.saveAndFlush(book);
+            listsRepository.saveAndFlush(l);
             list.getScene().getWindow().hide();
         }
     }
