@@ -159,7 +159,9 @@ public class ListsController implements Initializable {
     }
 
     public void update() {
-        clickedSearchButton();
+        if (!FieldParser.isBlankString(searchTextField.getText()) || searchTypeComboBox.getValue().equals("Все")) {
+            clickedSearchButton();
+        }
     }
 
 }

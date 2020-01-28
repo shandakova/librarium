@@ -55,19 +55,19 @@ public class EditPageController {
             return;
         }
         if (FieldParser.checkAuthor(author.getText()).length() > 0) {
-            showAlertSymbol(FieldParser.checkBookName(author.getText()));
+            showAlertSymbol(FieldParser.checkAuthor(author.getText()));
             return;
         }
         if (FieldParser.checkGenre(genre.getText()).length() > 0) {
-            showAlertSymbol(FieldParser.checkBookName(author.getText()));
+            showAlertSymbol(FieldParser.checkGenre(genre.getText()));
             return;
         }
         if (FieldParser.checkISBN(isbn.getText()).length() > 0) {
-            showAlertSymbol(FieldParser.checkBookName(author.getText()));
+            showAlertSymbol(FieldParser.checkISBN(isbn.getText()));
             return;
         }
         if (FieldParser.checkYear(year.getText()).length() > 0) {
-            showAlertSymbol(FieldParser.checkBookName(author.getText()));
+            showAlertSymbol(FieldParser.checkYear(year.getText()));
             return;
         }
         book.setAuthor(author.getText());

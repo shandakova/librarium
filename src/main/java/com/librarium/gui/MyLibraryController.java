@@ -187,7 +187,8 @@ public class MyLibraryController implements Initializable {
                 return cell;
             }
         });
-
+        TableColumn<Book, String> colGenre = new TableColumn<>("Жанр");
+        colGenre.setCellValueFactory(new PropertyValueFactory<>("genre"));
 
         TableColumn<Book, Number> colRating = new TableColumn<>("Рейтинг");
         colRating.setCellValueFactory(new PropertyValueFactory<>("rate"));
@@ -220,7 +221,7 @@ public class MyLibraryController implements Initializable {
             }
 
         });
-        searchTable.getColumns().addAll(colAuthor, colName, colRating);
+        searchTable.getColumns().addAll(colAuthor, colName,colGenre, colRating);
     }
 
     public void update() {

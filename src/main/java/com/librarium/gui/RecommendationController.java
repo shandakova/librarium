@@ -3,6 +3,7 @@ package com.librarium.gui;
 import com.librarium.entity.dto.Book;
 import com.librarium.repository.BookApiRepository;
 import com.librarium.repository.BookRepository;
+import com.librarium.utils.FieldParser;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -102,20 +103,36 @@ public class RecommendationController implements Initializable {
             cell.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
                 Book book = cell.getTableView().getItems().get(cell.getIndex());
                 if (cell.getStyle().contains("green")) {
+                    cell.setCursor(Cursor.DEFAULT);
                     com.librarium.entity.Book b = bookApiRepository.castBookFromDtoBook(book);
-                    bookRepository.saveAndFlush(b);
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Информация");
-                    alert.setHeaderText(null);
-                    alert.getButtonTypes().set(0, new ButtonType("OK", ButtonBar.ButtonData.LEFT));
-                    alert.setContentText("Книга с названием :" + b.getName() + " добавлена успешно");
-                    alert.show();
-                    cell.setStyle(cell.getStyle().replace("green", "gray"));
-                    mlc.update();
+                    if (checkDtoBookLanguage(book)) {
+                        bookRepository.saveAndFlush(b);
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Информация");
+                        alert.setHeaderText(null);
+                        alert.getButtonTypes().set(0, new ButtonType("OK", ButtonBar.ButtonData.LEFT));
+                        alert.setContentText("Книга с названием :" + b.getName() + " добавлена успешно");
+                        alert.show();
+                        cell.setDisable(true);
+                        cell.setStyle("-fx-text-fill: gray;");
+                        mlc.update();
+                    }
                 }
             });
             cell.setFont(Font.font(30));
             return cell;
         });
+    }
+    private boolean checkDtoBookLanguage(Book book){
+        if (FieldParser.haveNotCirrilicLatinSymbols(book.getInfo())){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Информация");
+            alert.setHeaderText(null);
+            alert.getButtonTypes().set(0, new ButtonType("OK", ButtonBar.ButtonData.LEFT));
+            alert.setContentText("Книга не добавлена из-за недопустимого символов.");
+            alert.show();
+            return false;
+        }
+        return true;
     }
 }

@@ -21,6 +21,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -86,7 +87,7 @@ public class ViewListController implements Initializable {
     }
 
     public void clickedDelete() {
-        Set<Book> books = list.getBooks();
+        Set<Book> books = new HashSet(bookRepository.findByLists(list));
         for (Book b : books) {
             b.getLists().remove(list);
             bookRepository.saveAndFlush(b);

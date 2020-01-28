@@ -131,4 +131,12 @@ public class FieldParser {
         }
         return false;
     }
+
+    public static boolean haveNotCirrilicLatinSymbols(String s) {
+        for (char a : s.toCharArray()) {
+            if (Character.isLetter(a)&&Character.UnicodeBlock.of(a) != Character.UnicodeBlock.CYRILLIC && Character.UnicodeBlock.of(a) != Character.UnicodeBlock.BASIC_LATIN
+            ) return true;
+        }
+        return false;
+    }
 }
