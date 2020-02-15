@@ -15,13 +15,14 @@ public class FieldParser {
 
     //Разрешены русские, латинские буквы и проблеьные символы
     private static String checkForAllowedLatterAndSpaces(String line) {
+        if (line.length() == 0) return "";
         Pattern pattern = Pattern.compile(
                 "[" +
                         "а-яА-ЯёЁ" +    //буквы русского алфавита
                         "a-zA-Z" +      //буквы латинского алфавита
                         "\\s" +         //пробельные символы
                         "]" +
-                        "*");                   //любое количество символов выше
+                        "+");                   //любое количество символов выше
         Matcher matcher = pattern.matcher(line);
         if (matcher.find()) {
             int start = matcher.start();
@@ -35,12 +36,14 @@ public class FieldParser {
                     return Character.toString(line.charAt(end));
                 }
             }
+        } else {
+            return line.substring(0, 1);
         }
-        return " ";
     }
 
     //возращает неверный символ или пустую строку для проверки названия
     public static String checkBookName(String line) {
+        if (line.length() == 0) return "";
         Pattern pattern = Pattern.compile(
                 "[" +
                         "а-яА-ЯёЁ" +    //буквы русского алфавита
@@ -49,7 +52,7 @@ public class FieldParser {
                         "\\p{Punct}" +   //знаки пунктуации
                         "\\d" +          //цифры
                         "]" +
-                        "*");                   //любое количество символов выше
+                        "+");                   //любое количество символов выше
         Matcher matcher = pattern.matcher(line);
         if (matcher.find()) {
             int start = matcher.start();
@@ -63,8 +66,9 @@ public class FieldParser {
                     return Character.toString(line.charAt(end));
                 }
             }
+        } else {
+            return line.substring(0, 1);
         }
-        return " ";
     }
 
     //возращает неверный символ или пустую строку для проверки года
@@ -73,9 +77,12 @@ public class FieldParser {
                 "[" +
                         "\\d" +          //цифры
                         "]" +
-                        "{4}");                   //любое количество символов выше
+                        "+");
         Matcher matcher = pattern.matcher(line);
-        if (matcher.find()) {
+        if (line.length() < 4) {
+            return " ";
+        }
+        if (matcher.find() && line.length() == 4) {
             int start = matcher.start();
             int end = matcher.end();
             if (start == 0 && end == line.length()) {
@@ -87,18 +94,20 @@ public class FieldParser {
                     return Character.toString(line.charAt(end));
                 }
             }
+        } else {
+            return line.substring(4, 5);
         }
-        return " ";
     }
 
     //возращает неверный символ или пустую строку для проверки ISBN
     public static String checkISBN(String line) {
+        if (line.length() == 0) return "";
         Pattern pattern = Pattern.compile(
                 "[" +
                         "\\d" +          //цифры
                         "\\-" +
                         "]" +
-                        "*");                   //любое количество символов выше
+                        "+");                   //1 и более символ
         Matcher matcher = pattern.matcher(line);
         if (matcher.find()) {
             int start = matcher.start();
@@ -112,13 +121,13 @@ public class FieldParser {
                     return Character.toString(line.charAt(end));
                 }
             }
+        } else {
+            return line.substring(0, 1);
         }
-        return " ";
     }
 
     public static String parseISBN(String line) {
-        String resultISBN = line.replaceAll("\\-", "");
-        return resultISBN;
+        return line.replaceAll("\\-", "");
     }
 
     public static boolean isBlankString(String string) {
@@ -132,9 +141,9 @@ public class FieldParser {
         return false;
     }
 
-    public static boolean haveNotCirrilicLatinSymbols(String s) {
+    public static boolean haveNotCyrillicLatinSymbols(String s) {
         for (char a : s.toCharArray()) {
-            if (Character.isLetter(a)&&Character.UnicodeBlock.of(a) != Character.UnicodeBlock.CYRILLIC && Character.UnicodeBlock.of(a) != Character.UnicodeBlock.BASIC_LATIN
+            if (Character.isLetter(a) && Character.UnicodeBlock.of(a) != Character.UnicodeBlock.CYRILLIC && Character.UnicodeBlock.of(a) != Character.UnicodeBlock.BASIC_LATIN
             ) return true;
         }
         return false;

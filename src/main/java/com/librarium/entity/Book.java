@@ -1,12 +1,11 @@
 package com.librarium.entity;
 
 
-import javax.persistence.*;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,7 +24,7 @@ public class Book {
     private int year;
     private int rate;
     private String ISBN;
-    @OneToMany(mappedBy = "book", orphanRemoval = true, cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "book", orphanRemoval = true, cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private Set<Quote> quotes = new HashSet<>();
 
     @OneToMany(mappedBy = "book", orphanRemoval = true, cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
@@ -51,7 +50,8 @@ public class Book {
     public int getNumberQuotes() {
         return quotes.size();
     }
-    public String toString(){
+
+    public String toString() {
         return "";
     }
 }

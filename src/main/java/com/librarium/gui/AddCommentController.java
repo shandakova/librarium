@@ -23,7 +23,7 @@ public class AddCommentController implements Initializable {
     @FXML
     private Button saveComment;
 
-    public void initData( Book book, CommentRepository commentRepository) {
+    public void initData(Book book, CommentRepository commentRepository) {
         this.book = book;
         this.commentRepository = commentRepository;
     }

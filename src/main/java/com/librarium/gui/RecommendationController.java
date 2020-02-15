@@ -3,6 +3,7 @@ package com.librarium.gui;
 import com.librarium.entity.dto.Book;
 import com.librarium.repository.BookApiRepository;
 import com.librarium.repository.BookRepository;
+import com.librarium.service.BookService;
 import com.librarium.utils.FieldParser;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -31,12 +32,14 @@ public class RecommendationController implements Initializable {
     private BookRepository bookRepository;
     @Autowired
     private MyLibraryController mlc;
+    @Autowired
+    private BookService bookService;
 
     @FXML
     private void refreshTable() {
         if (checkInternetConnection()) {
             try {
-                recTable.setItems(FXCollections.observableArrayList(bookApiRepository.getRecommendation(bookRepository.findAll())));
+                recTable.setItems(FXCollections.observableArrayList(bookService.getRecommendation(bookRepository.findAll())));
                 setCellFactory((TableColumn<Book, String>) recTable.getColumns().get(1));
             } catch (RestClientException e) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -104,7 +107,7 @@ public class RecommendationController implements Initializable {
                 Book book = cell.getTableView().getItems().get(cell.getIndex());
                 if (cell.getStyle().contains("green")) {
                     cell.setCursor(Cursor.DEFAULT);
-                    com.librarium.entity.Book b = bookApiRepository.castBookFromDtoBook(book);
+                    com.librarium.entity.Book b = bookService.castBookFromDtoBook(book);
                     if (checkDtoBookLanguage(book)) {
                         bookRepository.saveAndFlush(b);
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -123,8 +126,9 @@ public class RecommendationController implements Initializable {
             return cell;
         });
     }
-    private boolean checkDtoBookLanguage(Book book){
-        if (FieldParser.haveNotCirrilicLatinSymbols(book.getInfo())){
+
+    private boolean checkDtoBookLanguage(Book book) {
+        if (FieldParser.haveNotCyrillicLatinSymbols(book.getInfo())) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Информация");
             alert.setHeaderText(null);

@@ -221,7 +221,7 @@ public class MyLibraryController implements Initializable {
             }
 
         });
-        searchTable.getColumns().addAll(colAuthor, colName,colGenre, colRating);
+        searchTable.getColumns().addAll(colAuthor, colName, colGenre, colRating);
     }
 
     public void update() {

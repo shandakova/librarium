@@ -50,7 +50,7 @@ public class AddBookController implements Initializable {
 
     @FXML
     private void clickedAddBookButton() {
-        int actualYear = 2020;
+        int actualYear;
         String author = addAuthor.getText();
         String title = addTitle.getText();
         String genre = addGenre.getText();

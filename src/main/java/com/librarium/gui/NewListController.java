@@ -12,20 +12,21 @@ public class NewListController {
     @FXML
     private Button okBtn;
     private ListsRepository lr;
-    public void initData(ListsRepository lr){
+
+    public void initData(ListsRepository lr) {
         this.lr = lr;
     }
 
     public void clickedOk() {
         String name = textField.getText();
-        if (FieldParser.isBlankString(name)){
+        if (FieldParser.isBlankString(name)) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Ошибка");
             alert.setHeaderText(null);
             alert.getButtonTypes().set(0, new ButtonType("OK", ButtonBar.ButtonData.LEFT));
             alert.setContentText("Поле не должно быть пустым!");
             alert.show();
-        } else if (lr.findByName(name).size()>0){
+        } else if (lr.findByName(name).size() > 0) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Ошибка");
             alert.setHeaderText(null);

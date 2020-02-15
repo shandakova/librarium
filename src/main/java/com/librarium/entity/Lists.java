@@ -1,10 +1,9 @@
 package com.librarium.entity;
 
-import javax.persistence.*;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,13 +15,14 @@ public class Lists {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @ManyToMany(mappedBy = "lists",fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "lists", fetch = FetchType.EAGER)
     private Set<Book> books = new HashSet<>();
 
     public Lists(String name) {
         this.name = name;
     }
-    public int getSize(){
+
+    public int getSize() {
         return books.size();
     }
 }

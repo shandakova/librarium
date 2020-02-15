@@ -112,11 +112,12 @@ public class ViewListController implements Initializable {
         stage.initOwner(addBtn.getScene().getWindow());
         SearchAddBookInListController controller = loader.getController();
         controller.initData(list, listsRepository, bookRepository);
-        stage.setOnHidden(e->update());
+        stage.setOnHidden(e -> update());
         stage.show();
     }
-    private void update(){
-        bookTable.getItems().remove(0,bookTable.getItems().size());
+
+    private void update() {
+        bookTable.getItems().remove(0, bookTable.getItems().size());
         Lists list = listsRepository.getOne(this.list.getId());
         bookTable.setItems(FXCollections.observableArrayList(bookRepository.findByLists(list)));
     }
