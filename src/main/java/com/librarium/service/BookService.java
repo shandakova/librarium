@@ -4,16 +4,17 @@ import com.librarium.entity.dto.Book;
 import com.librarium.entity.dto.VolumeInfo;
 import com.librarium.repository.BookApiRepository;
 import com.librarium.utils.FieldParser;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.*;
 
 @Service
 public class BookService {
+
     final private HashMap<String, String> genres = getGenres();
     @Autowired
     @Lazy
@@ -41,11 +42,12 @@ public class BookService {
         }
         List<String> rec_genres = get5orLessMaxKeys(genres);
         List<String> rec_authors = get5orLessMaxKeys(authors);
-        bookApiRepository.findBooksByGenresAndAuthors(result, rec_genres, rec_authors);
-        List<com.librarium.entity.dto.Book> resultFin = new ArrayList<>();
+        List<com.librarium.entity.dto.Book> resultFin =new ArrayList();
+        result = bookApiRepository.findBooksByGenresAndAuthors( rec_genres, rec_authors);
         for (com.librarium.entity.Book b : books) {
             for (com.librarium.entity.dto.Book b1 : result) {
-                if (b1.getVolumeInfo().getIndustryIdentifiers() != null && b1.getVolumeInfo().getIndustryIdentifiers().get(0).get("type").startsWith("ISBN")) {
+                if (b1.getVolumeInfo().getIndustryIdentifiers() != null && b1.getVolumeInfo().getIndustryIdentifiers()
+                        .get(0).get("type").startsWith("ISBN")) {
                     String isbn = b1.getVolumeInfo().getIndustryIdentifiers().get(0).get("identifier");
                     if (!isbn.equals(FieldParser.parseISBN(b.getISBN()))) {
                         resultFin.add(b1);
@@ -155,15 +157,12 @@ public class BookService {
         return "other";
     }
 
+    @SneakyThrows
     private HashMap<String, String> getGenres() {
         File file =
                 new File("src/main/resources/bisac_genres.txt");
         Scanner sc = null;
-        try {
-            sc = new Scanner(file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        sc = new Scanner(file);
         HashMap<String, String> genres = new HashMap<>();
         if (sc != null) {
             while (sc.hasNextLine()) {

@@ -19,7 +19,7 @@ import java.util.Objects;
 
 @Repository
 public class BookApiRepository {
-    final private RestTemplate restTemplate = new RestTemplate();
+    private RestTemplate restTemplate = new RestTemplate();
     final private String SEARCH_URL = "https://www.googleapis.com/books/v1/volumes";
     final private String FIELD_PARAM = "items(volumeInfo(title,categories,authors,publishedDate,industryIdentifiers,description))";
     @Autowired
@@ -125,7 +125,8 @@ public class BookApiRepository {
         }
     }
 
-    public void findBooksByGenresAndAuthors(List<com.librarium.entity.dto.Book> result, List<String> rec_genres, List<String> rec_authors) {
+    public List<com.librarium.entity.dto.Book> findBooksByGenresAndAuthors( List<String> rec_genres, List<String> rec_authors) {
+        List<com.librarium.entity.dto.Book> result = new ArrayList<>();
         for (String author : rec_authors) {
             UriComponents uriBuilder = UriComponentsBuilder.fromHttpUrl(SEARCH_URL)
                     .queryParam("fields", FIELD_PARAM)
@@ -161,5 +162,6 @@ public class BookApiRepository {
                 }
             }
         }
+        return result;
     }
 }
