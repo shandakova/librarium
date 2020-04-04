@@ -41,6 +41,11 @@ public class AddCommentController implements Initializable {
     @FXML
     private void clickedCancelButton() {
         Stage stage = (Stage) cancel.getScene().getWindow();
+        //stage.close();
+        close(stage);
+    }
+
+    public  void close(Stage stage) {
         stage.close();
     }
 
