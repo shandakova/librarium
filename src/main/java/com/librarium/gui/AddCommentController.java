@@ -45,7 +45,7 @@ public class AddCommentController implements Initializable {
         close(stage);
     }
 
-    public  void close(Stage stage) {
+    public void close(Stage stage) {
         stage.close();
     }
 

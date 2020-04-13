@@ -147,7 +147,7 @@ public class BookServiceTest {
 
     @Test
     public void getEngGenre_genreInBase_returnValueFromBase() {
-        String actualGenre = bookService.getEngGenre("компьютеры");
-        assertEquals("computers", actualGenre);
+        String actualGenre = bookService.getEngGenre("закон");
+        assertEquals("law", actualGenre);
     }
 }

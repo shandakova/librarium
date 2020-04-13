@@ -59,7 +59,6 @@ public class AddListController {
             bookRepository.flush();
             book = bookRepository.findById(book.getId()).get();
             book.getLists().add(l);
-            System.err.println(l.getId() + " " + book.getId());
             bookRepository.saveAndFlush(book);
             list.getScene().getWindow().hide();
         }
