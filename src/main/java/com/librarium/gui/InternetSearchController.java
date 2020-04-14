@@ -37,20 +37,24 @@ public class InternetSearchController implements Initializable {
         if (!checkSearchField(type, searchReq)) return;
         ObservableList<Book> searchList = FXCollections.observableArrayList();
         try {
-            switch (type) {
-                case ("ISBN"):
-                    searchList.addAll(bookApiRepository.getBookListByIsbn(searchReq, 30));
-                    break;
-                case ("Название"):
-                    searchList.addAll(bookApiRepository.getBookListByTitle(searchReq, 30));
-                    break;
-                case ("Автор"):
-                    searchList.addAll(bookApiRepository.getBookListByAuthor(searchReq, 30));
-                    break;
-                case ("Жанр"):
-                    searchList.addAll(bookApiRepository.getBookListByGenre(searchReq, 30));
-                    break;
+            if ("ISBN".equals(type)) {
+                searchList.addAll(bookApiRepository.getBookListByIsbn(searchReq, 30));
+            } else if ("Название".equals(type)) {
+                searchList.addAll(bookApiRepository.getBookListByTitle(searchReq, 30));
+            } else if ("Автор".equals(type)) {
+                searchList.addAll(bookApiRepository.getBookListByAuthor(searchReq, 30));
+            } else {
+                searchList.addAll(bookApiRepository.getBookListByGenre(searchReq, 30));
             }
+            if (searchList.size() == 0) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Информация");
+                alert.setHeaderText(null);
+                alert.getButtonTypes().set(0, new ButtonType("OK", ButtonBar.ButtonData.LEFT));
+                alert.setContentText("Не найдено ничего");
+                alert.show();
+            }
+            searchTable.setItems(searchList);
         } catch (RestClientException e) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Ошибка");
@@ -59,15 +63,6 @@ public class InternetSearchController implements Initializable {
             alert.setContentText("Сервис поиска недоступен.");
             alert.show();
         }
-        if (searchList.size() == 0) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Информация");
-            alert.setHeaderText(null);
-            alert.getButtonTypes().set(0, new ButtonType("OK", ButtonBar.ButtonData.LEFT));
-            alert.setContentText("Не найдено ничего");
-            alert.show();
-        }
-        searchTable.setItems(searchList);
     }
 
     private boolean checkSearchField(String type, String searchReq) {
@@ -129,18 +124,27 @@ public class InternetSearchController implements Initializable {
         colIsbn.setCellValueFactory(new PropertyValueFactory<>("ISBN"));
 
         TableColumn<Book, String> colAdd = new TableColumn<>("");
+        colAdd.setId("#addCol");
         colAdd.setCellFactory(param -> {
             TableCell<Book, String> cell = new TableCell<Book, String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setText(null);
+                    } else {
+                        setText("+");
+                        setCursor(Cursor.HAND);
+                        addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                            Book book = getTableView().getItems().get(getIndex());
+                            abc.fillField(book);
+                            getScene().getWindow().hide();
+                        });
+                    }
+                }
             };
-            cell.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-                Book book = cell.getTableView().getItems().get(cell.getIndex());
-                abc.fillField(book);
-                cell.getScene().getWindow().hide();
-            });
-            cell.setText("+");
             cell.setFont(Font.font(15));
             cell.setStyle("-fx-text-fill: green;");
-            cell.setCursor(Cursor.HAND);
             return cell;
         });
         colAdd.setMaxWidth(30);

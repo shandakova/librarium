@@ -6,6 +6,7 @@ import com.librarium.repository.BookRepository;
 import com.librarium.repository.ListsRepository;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import lombok.SneakyThrows;
@@ -72,7 +73,7 @@ public class AddListControllerTest extends GuiTest {
         waitUntil("#list", visible());
         click("#add");
         FxAssert.verifyThat(new FxRobot().window("Предупреждение"), WindowMatchers.isShowing());
-        closeCurrentWindow();
+        push(KeyCode.ENTER);
         sleep(1000);
         closeCurrentWindow();
     }
@@ -87,10 +88,11 @@ public class AddListControllerTest extends GuiTest {
         click(MouseButton.PRIMARY);
         click("#add");
         FxAssert.verifyThat(new FxRobot().window("Предупреждение"), WindowMatchers.isShowing());
-        closeCurrentWindow();
+        push(KeyCode.ENTER);
         sleep(1000);
         closeCurrentWindow();
     }
+
 
     @Test
     public void clickedAdd_bookNotInList_windowClose() {
@@ -101,6 +103,7 @@ public class AddListControllerTest extends GuiTest {
         sleep(1000);
         click(MouseButton.PRIMARY);
         click("#add");
+        sleep(1000);
         Mockito.verify(bookRepository, times(1)).saveAndFlush(any(Book.class));
     }
 
