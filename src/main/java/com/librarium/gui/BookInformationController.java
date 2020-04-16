@@ -23,6 +23,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import lombok.SneakyThrows;
 import org.controlsfx.control.Rating;
 import org.springframework.stereotype.Controller;
 
@@ -132,17 +133,18 @@ public class BookInformationController {
                     }
                 };
                 cell.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                    @SneakyThrows
                     @Override
                     public void handle(MouseEvent event) {
                         Quote quote = cell.getTableView().getItems().get(cell.getIndex());
                         Stage stage = new Stage();
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editquote.fxml"));
-                        try {
+                        //try {
                             Parent root = loader.load();
                             stage.setScene(new Scene(root));
-                        } catch (IOException e) {
+                        /*} catch (IOException e) {
                             e.printStackTrace();
-                        }
+                        }*/
                         stage.setTitle("Редактирование цитаты");
                         stage.initModality(Modality.WINDOW_MODAL);
                         stage.initOwner(
@@ -182,17 +184,18 @@ public class BookInformationController {
                     }
                 };
                 cell.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                    @SneakyThrows
                     @Override
                     public void handle(MouseEvent event) {
                         Comment comment = cell.getTableView().getItems().get(cell.getIndex());
                         Stage stage = new Stage();
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editcomment.fxml"));
-                        try {
+                        //try {
                             Parent root = loader.load();
                             stage.setScene(new Scene(root));
-                        } catch (IOException e) {
+                        /*} catch (IOException e) {
                             e.printStackTrace();
-                        }
+                        }*/
                         stage.setTitle("Редактирование комментария");
                         stage.initModality(Modality.WINDOW_MODAL);
                         stage.initOwner(
@@ -232,17 +235,18 @@ public class BookInformationController {
                     }
                 };
                 cell.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                    @SneakyThrows
                     @Override
                     public void handle(MouseEvent event) {
                         Lists list = cell.getTableView().getItems().get(cell.getIndex());
                         Stage stage = new Stage();
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/viewlist.fxml"));
-                        try {
+                        //try {
                             Parent root = loader.load();
                             stage.setScene(new Scene(root));
-                        } catch (IOException e) {
+                        /*} catch (IOException e) {
                             e.printStackTrace();
-                        }
+                        }*/
                         stage.setTitle("Просмотр листа");
                         stage.initModality(Modality.WINDOW_MODAL);
                         stage.initOwner(
@@ -280,16 +284,17 @@ public class BookInformationController {
         stage.show();
     }
 
+    @SneakyThrows
     @FXML
     private void clickedAddQuoteButton() {
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/addquote.fxml"));
-        try {
+        //try {
             Parent root = loader.load();
             stage.setScene(new Scene(root));
-        } catch (IOException e) {
+        /*} catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
         stage.setTitle("Добавление цитаты");
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(editBook.getScene().getWindow());
@@ -300,16 +305,17 @@ public class BookInformationController {
         stage.show();
     }
 
+    @SneakyThrows
     @FXML
     private void clickedAddCommentButton() {
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/addcomment.fxml"));
-        try {
+        //try {
             Parent root = loader.load();
             stage.setScene(new Scene(root));
-        } catch (IOException e) {
+        /*} catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
         stage.setTitle("Добавление комментария");
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(addComment.getScene().getWindow());
@@ -319,16 +325,17 @@ public class BookInformationController {
         stage.show();
     }
 
+    @SneakyThrows
     @FXML
     private void clickedAddListButton() {
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/addlist.fxml"));
-        try {
+        //try {
             Parent root = loader.load();
             stage.setScene(new Scene(root));
-        } catch (IOException e) {
+        /*} catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
         stage.setTitle("Добавление книги в лист");
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(addList.getScene().getWindow());
