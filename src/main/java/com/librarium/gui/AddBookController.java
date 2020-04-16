@@ -14,11 +14,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import lombok.SneakyThrows;
 import org.controlsfx.control.Rating;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ResourceBundle;
@@ -86,14 +86,15 @@ public class AddBookController implements Initializable {
     }
 
     public void fillField(Book book) {
-        addAuthor.setText(book.getAuthor());
+        addAuthor.setText(book.getAuthor() != null ? book.getAuthor() : "");
         addTitle.setText(book.getName());
-        addGenre.setText(book.getGenre());
-        addYear.setText(String.valueOf(book.getYear()));
-        addISBN.setText(book.getISBN());
+        addGenre.setText(book.getGenre() != null ? book.getGenre() : "");
+        addYear.setText(book.getYear() == 0 ? "" : String.valueOf(book.getYear()));
+        addISBN.setText(book.getISBN() != null ? book.getISBN() : "");
     }
 
     @FXML
+    @SneakyThrows
     private void clickedSearchNetworkButton() {
         if (!checkInternetConnection()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -105,12 +106,8 @@ public class AddBookController implements Initializable {
         } else {
             Stage stage = new Stage();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/internetsearch.fxml"));
-            try {
-                Parent root = loader.load();
-                stage.setScene(new Scene(root));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            Parent root = loader.load();
+            stage.setScene(new Scene(root));
             stage.setTitle("Информация о книге");
             stage.initModality(Modality.WINDOW_MODAL);
             stage.initOwner(searchInternet.getScene().getWindow());
@@ -155,6 +152,7 @@ public class AddBookController implements Initializable {
             return false;
         }
         /*проверка автора*/
+
         symbol = FieldParser.checkAuthor(author);
         if (symbol.length() > 0) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -212,7 +210,7 @@ public class AddBookController implements Initializable {
 
             {
                 ratingChangeListener = (observable, oldValue, newValue) -> rate = newValue.intValue();
-
+                rating.setId("rate");
             }
 
             @Override
@@ -222,11 +220,7 @@ public class AddBookController implements Initializable {
                 if (empty) {
                     setGraphic(null);
                 } else {
-                    if (item != null) {
-                        rating.setRating(item.intValue());
-                    } else {
-                        rating.setRating(0);
-                    }
+                    rating.setRating(0);
                     rating.ratingProperty().addListener(ratingChangeListener);
                     setStyle("-fx-alignment: CENTER;");
                     setGraphic(rating);

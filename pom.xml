@@ -106,6 +106,13 @@
             <version>4.0.15-alpha</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>io.sniffy</groupId>
+            <artifactId>sniffy-junit</artifactId>
+            <version>3.1.5</version>
+            <scope>test</scope>
+        </dependency>
+
 
     </dependencies>
 

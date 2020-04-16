@@ -189,6 +189,7 @@ public class InternetSearchControllerTest extends GuiTest {
         move(boundsInScreen.getMaxX() - 5, boundsInScreen.getMinY());
         click(MouseButton.PRIMARY);
         Mockito.verify(bookApiRepository, times(1)).getBookListByTitle(anyString(), eq(30));
+        Mockito.verify(bookApiRepository, times(1)).getBookListByTitle(anyString(), eq(30));
     }
 
     @SneakyThrows
