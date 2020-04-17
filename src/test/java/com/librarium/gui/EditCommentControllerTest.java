@@ -26,8 +26,7 @@ public class EditCommentControllerTest extends GuiTest {
     private CommentRepository commentRepository = mock(CommentRepository.class);
     private EditCommentController editQuoteController = mock(EditCommentController.class);
     public Comment comment = new Comment();
-
-    @SneakyThrows
+    
     @Before
     public void initMock() {
         Mockito.when(commentRepository.saveAndFlush(any(Comment.class))).thenAnswer(i -> i.getArguments()[0]);

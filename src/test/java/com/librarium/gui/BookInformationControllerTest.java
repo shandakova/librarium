@@ -48,7 +48,7 @@ public class BookInformationControllerTest extends GuiTest {
     private Alert alert = mock(Alert.class);
     public Book book = new Book();
 
-    @SneakyThrows
+
     @Before
     public void initMock() {
         Mockito.when(bookRepository.saveAndFlush(any(Book.class))).thenAnswer(i -> i.getArguments()[0]);
