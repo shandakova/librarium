@@ -17,6 +17,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import lombok.SneakyThrows;
 
 import java.io.IOException;
 import java.net.URL;
@@ -98,15 +99,16 @@ public class ViewListController implements Initializable {
         bookTable.getScene().getWindow().hide();
     }
 
+    @SneakyThrows
     public void clickedAdd() {
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/searchaddbookinlist.fxml"));
-        try {
+        //try {
             Parent root = loader.load();
             stage.setScene(new Scene(root));
-        } catch (IOException e) {
+        /*} catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
         stage.setTitle("Добавление книги в лист");
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(addBtn.getScene().getWindow());

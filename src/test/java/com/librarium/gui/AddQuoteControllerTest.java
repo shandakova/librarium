@@ -41,7 +41,6 @@ public class AddQuoteControllerTest extends GuiTest {
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader(AddCommentController.class.getResource("/fxml/addquote.fxml"));
         parent = loader.load();
-        //Scene scene = parent.getScene();
         if (parent.getScene() == null) {
             stage.setScene(new Scene(parent));
         } else {
