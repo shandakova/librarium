@@ -34,7 +34,7 @@ import static org.mockito.Mockito.*;
 public class AddBookControllerTest extends GuiTest {
     @Rule
     public SniffyRule sniffyRule = new SniffyRule();
-    final protected FXMLLoader loader = new FXMLLoader(AddListController.class.getResource("/fxml/addbook.fxml"));
+    final protected FXMLLoader loader = new FXMLLoader(AddBookController.class.getResource("/fxml/addbook.fxml"));
     protected Parent parent;
     @InjectMocks
     private AddBookController addBookController;

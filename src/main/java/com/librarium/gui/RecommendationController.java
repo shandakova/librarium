@@ -1,7 +1,6 @@
 package com.librarium.gui;
 
 import com.librarium.entity.dto.Book;
-import com.librarium.repository.BookApiRepository;
 import com.librarium.repository.BookRepository;
 import com.librarium.service.BookService;
 import com.librarium.utils.FieldParser;
@@ -26,8 +25,19 @@ import java.util.ResourceBundle;
 public class RecommendationController implements Initializable {
     @FXML
     private TableView<Book> recTable;
-    @Autowired
-    private BookApiRepository bookApiRepository;
+
+    public void setBookRepository(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
+    }
+
+    public void setMlc(MyLibraryController mlc) {
+        this.mlc = mlc;
+    }
+
+    public void setBookService(BookService bookService) {
+        this.bookService = bookService;
+    }
+
     @Autowired
     private BookRepository bookRepository;
     @Autowired
@@ -39,6 +49,7 @@ public class RecommendationController implements Initializable {
     private void refreshTable() {
         if (checkInternetConnection()) {
             try {
+                if (bookService == null) return;
                 recTable.setItems(FXCollections.observableArrayList(bookService.getRecommendation(bookRepository.findAll())));
                 setCellFactory((TableColumn<Book, String>) recTable.getColumns().get(1));
             } catch (RestClientException e) {
@@ -55,7 +66,7 @@ public class RecommendationController implements Initializable {
             alert.setHeaderText(null);
             alert.getButtonTypes().set(0, new ButtonType("OK", ButtonBar.ButtonData.LEFT));
             alert.setContentText("Рекомендации без интернета не доступны!");
-            alert.showAndWait();
+            alert.show();
         }
     }
 
@@ -115,7 +126,7 @@ public class RecommendationController implements Initializable {
                         alert.setHeaderText(null);
                         alert.getButtonTypes().set(0, new ButtonType("OK", ButtonBar.ButtonData.LEFT));
                         alert.setContentText("Книга с названием :" + b.getName() + " добавлена успешно");
-                        alert.show();
+                        alert.showAndWait();
                         cell.setDisable(true);
                         cell.setStyle("-fx-text-fill: gray;");
                         mlc.update();
