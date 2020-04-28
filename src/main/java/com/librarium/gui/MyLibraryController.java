@@ -23,11 +23,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import lombok.SneakyThrows;
 import org.controlsfx.control.Rating;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
@@ -53,13 +53,18 @@ public class MyLibraryController implements Initializable {
     @Autowired
     private ListsController lc;
 
+    public void init(BookRepository bookRepository, CommentRepository commentRepository, QuoteRepository quoteRepository,
+                     ListsRepository listsRepository, ListsController lc) {
+        this.bookRepository = bookRepository;
+        this.commentRepository = commentRepository;
+        this.quoteRepository = quoteRepository;
+        this.listsRepository = listsRepository;
+        this.lc = lc;
+    }
+
     @FXML
     private void changedSearchType() {
-        if (searchTypeComboBox.getValue() == "Все") {
-            searchTextField.setDisable(true);
-        } else {
-            searchTextField.setDisable(false);
-        }
+        searchTextField.setDisable(searchTypeComboBox.getValue() == "Все");
     }
 
     @FXML
@@ -68,19 +73,14 @@ public class MyLibraryController implements Initializable {
         String searchReq = searchTextField.getText();
         if (!checkSearchField(type, searchReq)) return;
         ObservableList<Book> searchList = FXCollections.observableArrayList();
-        switch (type) {
-            case ("Все"):
-                searchList.addAll(bookRepository.findAll());
-                break;
-            case ("Название"):
-                searchList.addAll(bookRepository.findByNameContainsIgnoreCase(searchReq));
-                break;
-            case ("Автор"):
-                searchList.addAll(bookRepository.findByAuthorContainsIgnoreCase(searchReq));
-                break;
-            case ("Жанр"):
-                searchList.addAll(bookRepository.findByGenreContainsIgnoreCase(searchReq));
-                break;
+        if ("Все".equals(type)) {
+            searchList.addAll(bookRepository.findAll());
+        } else if ("Название".equals(type)) {
+            searchList.addAll(bookRepository.findByNameContainsIgnoreCase(searchReq));
+        } else if ("Автор".equals(type)) {
+            searchList.addAll(bookRepository.findByAuthorContainsIgnoreCase(searchReq));
+        } else {
+            searchList.addAll(bookRepository.findByGenreContainsIgnoreCase(searchReq));
         }
         searchTable.setItems(searchList);
     }
@@ -136,7 +136,7 @@ public class MyLibraryController implements Initializable {
         searchTable.setPlaceholder(new Label("Пока здесь нет книг :с"));
         searchTable.setEditable(true);
         ObservableList<Book> observeList = FXCollections.observableArrayList();
-        observeList.addAll((Collection<? extends Book>) bookRepository.findAll());
+        if (bookRepository != null) observeList.addAll((Collection<? extends Book>) bookRepository.findAll());
 
         searchTable.setItems(observeList);
         TableColumn<Book, Integer> colAuthor = new TableColumn<>("Автор");
@@ -151,35 +151,24 @@ public class MyLibraryController implements Initializable {
                     @Override
                     public void updateItem(String firstName, boolean empty) {
                         super.updateItem(firstName, empty);
-                        if (empty) {
-                            setText(null);
-                        } else {
-                            setText(firstName);
-                        }
+                        setText(firstName);
                     }
                 };
                 cell.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
                     @Override
+                    @SneakyThrows
                     public void handle(MouseEvent event) {
                         Book book = cell.getTableView().getItems().get(cell.getIndex());
                         Stage stage = new Stage();
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/bookInformation.fxml"));
-                        try {
-                            Parent root = loader.load();
-                            stage.setScene(new Scene(root));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        stage.setScene(new Scene(loader.load()));
                         stage.setTitle("Информация о книге");
                         stage.initModality(Modality.WINDOW_MODAL);
                         stage.initOwner(
                                 ((Node) event.getSource()).getScene().getWindow());
                         BookInformationController controller = loader.getController();
                         controller.initData(bookRepository, commentRepository, quoteRepository, listsRepository, book, mlc, lc);
-                        stage.setOnCloseRequest(e ->
-                        {
-                            update();
-                        });
+                        stage.setOnCloseRequest(e -> update());
                         stage.show();
                     }
                 });
@@ -211,15 +200,12 @@ public class MyLibraryController implements Initializable {
             protected void updateItem(Number item, boolean empty) {
                 super.updateItem(item, empty);
                 rating.ratingProperty().removeListener(ratingChangeListener);
-                if (empty) {
-                    setGraphic(null);
-                } else {
+                if (!empty) {
                     rating.setRating(item.doubleValue());
                     rating.ratingProperty().addListener(ratingChangeListener);
                     setGraphic(rating);
                 }
             }
-
         });
         searchTable.getColumns().addAll(colAuthor, colName, colGenre, colRating);
     }
