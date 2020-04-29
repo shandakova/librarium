@@ -28,7 +28,6 @@ public class MainApplication extends Application {
 
     public static void main(String[] args) {
         launch(args);
-
     }
 
     @Override
@@ -49,7 +48,6 @@ public class MainApplication extends Application {
                     alert.setOnCloseRequest(EventHandler -> exit(1));
                     alert.show();
                 });
-
             }
         }
     }

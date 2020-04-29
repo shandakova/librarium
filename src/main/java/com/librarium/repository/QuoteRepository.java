@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Transactional
-
 public interface QuoteRepository extends JpaRepository<Quote, Long> {
     List<Quote> findByBook(Book book);
 }
