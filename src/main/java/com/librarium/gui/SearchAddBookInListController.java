@@ -30,7 +30,7 @@ public class SearchAddBookInListController implements Initializable {
     @FXML
     private ComboBox searchfilter;
     @FXML
-    private TextField searchfield;
+    private TextArea searchfield;
     @FXML
     private TableView<Book> searchresult;
     @FXML

@@ -12,9 +12,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import lombok.SneakyThrows;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.loadui.testfx.GuiTest;
@@ -33,6 +35,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
 import static org.loadui.testfx.controls.impl.VisibleNodesMatcher.visible;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -52,6 +55,8 @@ public class BookInformationControllerTest extends GuiTest {
     @Before
     public void initMock() {
         Mockito.when(bookRepository.saveAndFlush(any(Book.class))).thenAnswer(i -> i.getArguments()[0]);
+        Mockito.when(commentRepository.saveAndFlush(any(Comment.class))).thenAnswer(i -> i.getArguments()[0]);
+        Mockito.when(quoteRepository.saveAndFlush(any(Quote.class))).thenAnswer(i -> i.getArguments()[0]);
         Mockito.doNothing().when(mlc).update();
         MockitoAnnotations.initMocks(this);
     }
@@ -115,21 +120,35 @@ public class BookInformationControllerTest extends GuiTest {
 
     @SneakyThrows
     @Test
-    public void addQuote_click_openWindow() {
+    public void addQuote_clickSave_openWindow() {
         setupStage();
         waitUntil("#addQuote", visible());
         click("#addQuote");
         FxAssert.verifyThat(new FxRobot().window("Добавление цитаты"), WindowMatchers.isShowing());
+        TextArea textArea = find("#textArea");
+        String text = "adsfdghj";
+        textArea.setText(text);
+        click("#saveQuote");
+        ArgumentCaptor<Quote> argument = ArgumentCaptor.forClass(Quote.class);
+        Mockito.verify(quoteRepository).saveAndFlush(argument.capture());
+        assertTrue(argument.getValue().getQuotation().equals(text));
         closeCurrentWindow();
     }
 
     @SneakyThrows
     @Test
-    public void addComment_click_openWindow() {
+    public void addComment_clickSave_openWindow() {
         setupStage();
         waitUntil("#addComment", visible());
         click("#addComment");
         FxAssert.verifyThat(new FxRobot().window("Добавление комментария"), WindowMatchers.isShowing());
+        TextArea textArea = find("#textArea");
+        String text = "adsfdghj";
+        textArea.setText(text);
+        click("#saveComment");
+        ArgumentCaptor<Comment> argument = ArgumentCaptor.forClass(Comment.class);
+        Mockito.verify(commentRepository).saveAndFlush(argument.capture());
+        Assert.assertTrue(argument.getValue().getComment().equals(text));
         closeCurrentWindow();
     }
 
@@ -145,7 +164,7 @@ public class BookInformationControllerTest extends GuiTest {
 
     @SneakyThrows
     @Test
-    public void onQuote_click_openWindow() {
+    public void onQuote_clickUpdate_openWindow() {
         setupStage();
         waitUntil("#quoteTable", visible());
         click("#quoteTable");
@@ -154,12 +173,16 @@ public class BookInformationControllerTest extends GuiTest {
         sleep(1000);
         click(MouseButton.PRIMARY);
         FxAssert.verifyThat(new FxRobot().window("Редактирование цитаты"), WindowMatchers.isShowing());
+        click("#updateQuote");
+        ArgumentCaptor<Quote> argument = ArgumentCaptor.forClass(Quote.class);
+        Mockito.verify(quoteRepository).saveAndFlush(argument.capture());
+        assertTrue(argument.getValue().getQuotation().equals("235"));
         closeCurrentWindow();
     }
 
     @SneakyThrows
     @Test
-    public void onComment_click_openWindow() {
+    public void onComment_clickUpdate_openWindow() {
         setupStage();
         waitUntil("#commentTable", visible());
         click("#commentTable");
@@ -168,6 +191,10 @@ public class BookInformationControllerTest extends GuiTest {
         sleep(1000);
         click(MouseButton.PRIMARY);
         FxAssert.verifyThat(new FxRobot().window("Редактирование комментария"), WindowMatchers.isShowing());
+        click("#updateComment");
+        ArgumentCaptor<Comment> argument = ArgumentCaptor.forClass(Comment.class);
+        Mockito.verify(commentRepository).saveAndFlush(argument.capture());
+        assertTrue(argument.getValue().getComment().equals("fsd"));
         closeCurrentWindow();
     }
 

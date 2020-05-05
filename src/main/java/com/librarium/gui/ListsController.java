@@ -1,5 +1,6 @@
 package com.librarium.gui;
 
+import com.librarium.entity.Book;
 import com.librarium.entity.Lists;
 import com.librarium.repository.BookRepository;
 import com.librarium.repository.ListsRepository;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.ResourceBundle;
 
 @Controller
@@ -37,7 +39,7 @@ public class ListsController implements Initializable {
     @FXML
     private ComboBox searchTypeComboBox;
     @FXML
-    private TextField searchTextField;
+    private TextArea searchTextField;
     @FXML
     private TableView<Lists> searchTable;
 
@@ -50,13 +52,18 @@ public class ListsController implements Initializable {
         }
     }
 
+    public void init(BookRepository bookRepository, ListsRepository listsRepository) {
+        this.bookRepository = bookRepository;
+        this.listsRepository = listsRepository;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initializeTable();
 
     }
 
-    private void initializeTable() {
+    public void initializeTable() {
         ObservableList<String> list = FXCollections.observableArrayList(
                 Arrays.asList("Все", "Название"));
         searchTypeComboBox.setItems(list);
@@ -65,7 +72,7 @@ public class ListsController implements Initializable {
         searchTable.setPlaceholder(new Label("Пока здесь нет листов :с"));
         searchTable.setEditable(true);
         ObservableList<Lists> observeList = FXCollections.observableArrayList();
-        observeList.addAll(listsRepository.findAll());
+        if (listsRepository != null) observeList.addAll((Collection<? extends Lists>) listsRepository.findAll());
 
         searchTable.setItems(observeList);
         TableColumn<Lists, String> colName = new TableColumn<>("Название");
@@ -149,7 +156,7 @@ public class ListsController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        stage.setTitle("Информация о книге");
+        stage.setTitle("Добавить лист");
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(searchTable.getScene().getWindow());
         NewListController controller = loader.getController();
