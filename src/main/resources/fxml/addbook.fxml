@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1192.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.librarium.gui.AddBookController">
+<AnchorPane prefHeight="800.0" prefWidth="1192.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.librarium.gui.AddBookController">
    <TextField fx:id="addTitle" layoutX="457.0" layoutY="209.0" prefHeight="42.0" prefWidth="386.0">
       <font>
          <Font size="19.0" />
