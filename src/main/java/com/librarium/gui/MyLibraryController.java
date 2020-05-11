@@ -200,6 +200,7 @@ public class MyLibraryController implements Initializable {
             protected void updateItem(Number item, boolean empty) {
                 super.updateItem(item, empty);
                 rating.ratingProperty().removeListener(ratingChangeListener);
+                setGraphic(null);
                 if (!empty) {
                     rating.setRating(item.doubleValue());
                     rating.ratingProperty().addListener(ratingChangeListener);

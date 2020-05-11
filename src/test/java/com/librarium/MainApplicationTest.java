@@ -27,7 +27,7 @@ public class MainApplicationTest {
             }
         };
         FXTestUtils.launchApp(MainApplication.class);
-        guiTest.sleep(20000);
+        guiTest.sleep(25000);
     }
 
     @Test

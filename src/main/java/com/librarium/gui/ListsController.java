@@ -1,6 +1,5 @@
 package com.librarium.gui;
 
-import com.librarium.entity.Book;
 import com.librarium.entity.Lists;
 import com.librarium.repository.BookRepository;
 import com.librarium.repository.ListsRepository;
