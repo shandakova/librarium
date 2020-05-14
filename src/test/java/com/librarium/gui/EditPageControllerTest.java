@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import lombok.SneakyThrows;
 import org.junit.Before;
@@ -19,6 +20,8 @@ import org.mockito.MockitoAnnotations;
 import org.testfx.api.FxAssert;
 import org.testfx.api.FxRobot;
 import org.testfx.matcher.base.WindowMatchers;
+
+import java.awt.*;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.loadui.testfx.controls.impl.VisibleNodesMatcher.visible;
@@ -165,6 +168,9 @@ public class EditPageControllerTest extends GuiTest {
         waitUntil("#delBtn", visible());
         click("#delBtn");
         FxAssert.verifyThat(new FxRobot().window("Удаление"), WindowMatchers.isShowing());
+        Point p = MouseInfo.getPointerInfo().getLocation();
+        move(p.x + 35, p.y - 245);
+        click(MouseButton.PRIMARY);
         closeCurrentWindow();
     }
 }

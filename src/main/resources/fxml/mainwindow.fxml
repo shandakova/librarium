@@ -20,7 +20,7 @@
         <Tab fx:id="AddBook" text="Добавление книги">
             <fx:include source="addbook.fxml" />
         </Tab>
-        <Tab text="Листы">
+        <Tab fx:id="Lists" text="Листы">
             <fx:include source="lists.fxml" />
         </Tab>
         <Tab text="Рекомендации">

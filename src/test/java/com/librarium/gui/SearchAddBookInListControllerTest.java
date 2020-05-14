@@ -198,6 +198,5 @@ public class SearchAddBookInListControllerTest extends GuiTest {
     public void ok_clicked_closeWindow() {
         waitUntil("#ok", visible());
         click("#ok");
-        closeCurrentWindow();
     }
 }

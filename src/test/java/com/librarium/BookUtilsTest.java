@@ -38,7 +38,22 @@ public class BookUtilsTest {
             }
         };
         FXTestUtils.launchApp(MainApplication.class);
+        guiTest.sleep(20000);
+        addBook();
+    }
+
+    public static void addBook() {
+        guiTest.click("#AddBook");
         guiTest.sleep(10000);
+        ((TextField) guiTest.find("#addTitle")).setText("Normal Title");
+        ((TextField) guiTest.find("#addISBN")).setText("12546");
+        ((TextField) guiTest.find("#addYear")).setText("1234");
+        ((TextField) guiTest.find("#addGenre")).setText("другое");
+        ((TextField) guiTest.find("#addAuthor")).setText("author");
+        guiTest.click("#rate");
+        guiTest.click("#addBook");
+        FxAssert.verifyThat(new FxRobot().window("Поздравляем!"), WindowMatchers.isShowing());
+        guiTest.click("OK");
     }
 
     @Test
@@ -144,17 +159,6 @@ public class BookUtilsTest {
 
     @Test
     public void editBook_changeAuthor() {
-        guiTest.click("#AddBook");
-        guiTest.sleep(10000);
-        ((TextField) guiTest.find("#addTitle")).setText("Normal Title");
-        ((TextField) guiTest.find("#addISBN")).setText("123546");
-        ((TextField) guiTest.find("#addYear")).setText("1234");
-        ((TextField) guiTest.find("#addGenre")).setText("другое");
-        ((TextField) guiTest.find("#addAuthor")).setText("author");
-        guiTest.click("#rate");
-        guiTest.click("#addBook");
-        FxAssert.verifyThat(new FxRobot().window("Поздравляем!"), WindowMatchers.isShowing());
-        guiTest.click("OK");
         guiTest.click("#myLibrary");
         guiTest.click("#searchTable");
         Point p = MouseInfo.getPointerInfo().getLocation();
@@ -189,17 +193,6 @@ public class BookUtilsTest {
 
     @Test
     public void editBook_wrongTitle_alertShowing() {
-        guiTest.click("#AddBook");
-        guiTest.sleep(10000);
-        ((TextField) guiTest.find("#addTitle")).setText("Normal Title");
-        ((TextField) guiTest.find("#addISBN")).setText("123546");
-        ((TextField) guiTest.find("#addYear")).setText("1234");
-        ((TextField) guiTest.find("#addGenre")).setText("другое");
-        ((TextField) guiTest.find("#addAuthor")).setText("author");
-        guiTest.click("#rate");
-        guiTest.click("#addBook");
-        FxAssert.verifyThat(new FxRobot().window("Поздравляем!"), WindowMatchers.isShowing());
-        guiTest.click("OK");
         guiTest.click("#myLibrary");
         guiTest.click("#searchTable");
         Point p = MouseInfo.getPointerInfo().getLocation();
@@ -295,17 +288,6 @@ public class BookUtilsTest {
 
     @Test
     public void removeBook_clickNo_alertShowing() {
-        guiTest.click("#AddBook");
-        guiTest.sleep(10000);
-        ((TextField) guiTest.find("#addTitle")).setText("Normal Title");
-        ((TextField) guiTest.find("#addISBN")).setText("123546");
-        ((TextField) guiTest.find("#addYear")).setText("1234");
-        ((TextField) guiTest.find("#addGenre")).setText("другое");
-        ((TextField) guiTest.find("#addAuthor")).setText("author");
-        guiTest.click("#rate");
-        guiTest.click("#addBook");
-        FxAssert.verifyThat(new FxRobot().window("Поздравляем!"), WindowMatchers.isShowing());
-        guiTest.click("OK");
         guiTest.click("#myLibrary");
         guiTest.click("#searchTable");
         Point p = MouseInfo.getPointerInfo().getLocation();
@@ -324,17 +306,6 @@ public class BookUtilsTest {
 
     @Test
     public void removeBook_clickYes_alertShowing() {
-        guiTest.click("#AddBook");
-        guiTest.sleep(10000);
-        ((TextField) guiTest.find("#addTitle")).setText("Normal Title");
-        ((TextField) guiTest.find("#addISBN")).setText("123546");
-        ((TextField) guiTest.find("#addYear")).setText("1234");
-        ((TextField) guiTest.find("#addGenre")).setText("другое");
-        ((TextField) guiTest.find("#addAuthor")).setText("author");
-        guiTest.click("#rate");
-        guiTest.click("#addBook");
-        FxAssert.verifyThat(new FxRobot().window("Поздравляем!"), WindowMatchers.isShowing());
-        guiTest.click("OK");
         guiTest.click("#myLibrary");
         guiTest.click("#searchTable");
         Point p = MouseInfo.getPointerInfo().getLocation();
