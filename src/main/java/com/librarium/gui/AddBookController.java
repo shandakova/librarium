@@ -108,7 +108,7 @@ public class AddBookController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/internetsearch.fxml"));
             Parent root = loader.load();
             stage.setScene(new Scene(root));
-            stage.setTitle("Информация о книге");
+            stage.setTitle("Поиск по интернету");
             stage.initModality(Modality.WINDOW_MODAL);
             stage.initOwner(searchInternet.getScene().getWindow());
             InternetSearchController controller = loader.getController();
